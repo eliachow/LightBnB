@@ -70,7 +70,7 @@ A simple multi-page Airbnb clone that uses a server-side Javascript to display t
 
 ## Setup
 
-# Database Setup
+### Database Setup
 
 - $ startpostgres
 - $ PSQL
@@ -79,7 +79,7 @@ A simple multi-page Airbnb clone that uses a server-side Javascript to display t
 - $ \i migrations/01_schema.sql
 - $ \i seeds/02_seeds.sql
 
-# Application Setup
+### Application Setup
 
 - $ npm i
 - You may need to have npx installed; $ npm install -g npx
