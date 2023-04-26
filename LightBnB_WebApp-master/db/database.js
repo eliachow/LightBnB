@@ -124,15 +124,18 @@ const getAllProperties = function(options, limit = 10) {
   // return propererties within min/max range
   if (min && max) {
     queryParams.push(`${min}`);
-    queryString +=  `AND (properties.cost_per_night / 100) > $${queryParams.length} `;
+    queryString +=  `AND (properties.cost_per_night / 100) >= $${queryParams.length} `;
     queryParams.push(`${max}`);
     queryString += `AND (properties.cost_per_night / 100) < $${queryParams.length} `;
+    console.log("min: ", min);
+    console.log("max: ", max);
   }
 
   // return avg min rating
+  let havingRating = ``;
   if (options.minimum_rating) {
     queryParams.push(`${options.minimum_rating}`);
-    queryString += `AND property_reviews.rating >= $${queryParams.length}`;
+    havingRating += `HAVING Avg(property_reviews.rating) >= $${queryParams.length}`
   }
 
   // check if owner_id has been passed to filter to their properties only
@@ -144,9 +147,11 @@ const getAllProperties = function(options, limit = 10) {
   queryParams.push(limit);
   queryString += `
   GROUP BY properties.id
+  ${havingRating}
   ORDER BY cost_per_night 
   LIMIT $${queryParams.length};
   `;
+
   
   return pool
     .query(queryString, queryParams)
