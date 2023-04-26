@@ -66,7 +66,7 @@ const addUser = function(user) {
   return pool
     .query(`INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *`, [user.name, user.email, user.password])
     .then((result) => {
-      return result;
+      return result.rows[0];
     });
 
 };
@@ -117,7 +117,7 @@ const getAllProperties = function(options, limit = 10) {
 
   // check if city has been passed as an option
   if (options.city) {
-    queryParams.push(`%${options.city}`);
+    queryParams.push(`%${options.city}%`);
     queryString += `WHERE city LIKE $${queryParams.length} `;
   }
 
@@ -144,7 +144,7 @@ const getAllProperties = function(options, limit = 10) {
   queryParams.push(limit);
   queryString += `
   GROUP BY properties.id
-  ORDER BY cost_per_night DESC
+  ORDER BY cost_per_night 
   LIMIT $${queryParams.length};
   `;
   
