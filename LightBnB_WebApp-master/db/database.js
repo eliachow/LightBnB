@@ -167,6 +167,8 @@ const getAllProperties = function(options, limit = 10) {
  */
 const addProperty = function(property) {
 
+  const costPerNightCents = property.cost_per_night * 100;
+
   return pool
     .query(`INSERT INTO properties (
     title, 
@@ -187,7 +189,7 @@ const addProperty = function(property) {
       property.description,
       property.thumbnail_photo_url,
       property.cover_photo_url,
-      property.cost_per_night,
+      costPerNightCents,
       property.street,
       property.city,
       property.province,
@@ -197,6 +199,7 @@ const addProperty = function(property) {
       property.number_of_bathrooms,
       property.number_of_bedrooms])
     .then((result) => {
+      console.log("🎈result.rows: ", result.rows)
       return result.rows;
     });
 };
